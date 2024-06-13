@@ -1,4 +1,4 @@
-FROM python:3.12.3
+FROM python:3.12.4
 
 RUN apt-get update
 
@@ -7,9 +7,9 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
-COPY src app
+COPY /src .
 COPY app.py .
 
 EXPOSE 5000
 
-CMD [ "python", "app.py"]
+CMD python app.py

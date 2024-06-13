@@ -15,6 +15,20 @@ The following variables must be defined in your environement :
     MYSQL_PASSWORD
     MYSQL_URL
 
+# Prerequises
+
+- Python 3.12.4
+- Docker & docker-compose
+
+# External libraries
+
+- Chocolatine is a Python library developped by myself (SQL queries generation)
+- Bcrypt to encrypt the passwords and compare hashes
+
+# SGBD
+
+- MySQL
+
 # Usage
 
 ```docker-compose up -d```
@@ -22,3 +36,11 @@ The following variables must be defined in your environement :
 # Testing
 
 ```pytest```
+
+# Code quality
+
+- Code formatted with Black
+
+# Architecture
+
+- Take a look at the diagram available on this repo

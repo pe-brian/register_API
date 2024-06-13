@@ -1,4 +1,4 @@
-version: '3.3'
+version: '3.8'
 services:
   db:
     image: mysql:5.7
@@ -14,26 +14,25 @@ services:
       - '3306'
     volumes:
       - my-db:/var/lib/mysql
-  api:
-    container_name: api
-    build:
-      context: .
-      dockerfile: Dockerfile
+
+  app:
+    build: .
+    command: flask run --host=0.0.0.0
+    volumes:
+      - .:/app
     ports:
-      - 8008:5000
+      - "5000:5000"
+    restart: always
     environment:
-      SMTP_HOST=
-      SMTP_PORT=
-      SMTP_USERNAME=
-      SMTP_PASSWORD=
-      MYSQL_DB=db
-      MYSQL_USER=user
-      MYSQL_PASSWORD=password
-      MYSQL_URL=127.0.0.1
-    depends_on:
-      db:
-        condition: service_healthy
-    links: 
-        - db
+      SMTP_HOST:
+      SMTP_PORT:
+      SMTP_USERNAME:
+      SMTP_PASSWORD:
+      MYSQL_DB: 'db'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_URL: '127.0.0.1'
+    links:
+      - db
 volumes:
   my-db:
