@@ -17,26 +17,28 @@ def create_user_table(db_service: Service):
 
 def test_create_object(db_service: Service):
     # Create a new user
-    user_data = {"email": "alice@example.com", "password_hash": "*"*60}
+    user_data = {"email": "alice@example.com", "password_hash": "*" * 60}
     user = db_service.create_object("user", **user_data)
     # Retrieve the user by ID
     retrieved_user = db_service.get_object_by_id("user", user.id)
     assert retrieved_user.email == "alice@example.com"
-    assert retrieved_user.password_hash == "*"*60
+    assert retrieved_user.password_hash == "*" * 60
 
 
 def test_update_object(db_service: Service):
     # Create a new user
-    user_data = {"email": "bob@example.com", "password_hash": "*"*60}
+    user_data = {"email": "bob@example.com", "password_hash": "*" * 60}
     user = db_service.create_object("user", **user_data)
     # Update user's email
-    updated_user = db_service.update_object("user", id=user.id, email="new_email@example.com")
+    updated_user = db_service.update_object(
+        "user", id=user.id, email="new_email@example.com"
+    )
     assert updated_user.email == "new_email@example.com"
 
 
 def test_delete_object_by_id(db_service: Service):
     # Create a new user
-    user_data = {"email": "charlie@example.com", "password_hash": "*"*60}
+    user_data = {"email": "charlie@example.com", "password_hash": "*" * 60}
     user = db_service.create_object("user", **user_data)
     # Delete the user
     db_service.delete_object_by_id("user", user.id)

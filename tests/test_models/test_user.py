@@ -28,7 +28,7 @@
 # #             # doit avoir appellé validate_email
 # #             # doit avoir appellé validate_password_hash
 
-# #     def test_validate_email(self):        
+# #     def test_validate_email(self):
 # #         self.user.data_validation_service = self.data_validation_service
 # #         self.user.validate_email()
 # #         self.data_validation_service.is_valid_email_format.assert_called_once_with(self.email)

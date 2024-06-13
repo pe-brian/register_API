@@ -11,9 +11,10 @@ from src.models.user import User
 
 @pytest.fixture
 def client():
-    app.config['TESTING'] = True
+    app.config["TESTING"] = True
     with app.test_client() as client:
         yield client
+
 
 @pytest.fixture(autouse=True)
 def mock_db_service():
@@ -26,14 +27,21 @@ def mock_db_service():
 
 
 def test_register(client: FlaskClient):
-    response = client.post('/register', json={'email': 'test@example.com', 'password': 'Password123!'})
+    response = client.post(
+        "/register", json={"email": "test@example.com", "password": "Password123!"}
+    )
     # assert response.status_code == 200
     json_data = response.get_json()
-    assert json_data['message'] == 'User registered, please check your email for the activation code'
+    assert (
+        json_data["message"]
+        == "User registered, please check your email for the activation code"
+    )
 
 
 def test_activate(client: FlaskClient):
-    response = client.post('/activate', json={'email': 'test@example.com', 'code': '1234'})
+    response = client.post(
+        "/activate", json={"email": "test@example.com", "code": "1234"}
+    )
     assert response.status_code == 200
     json_data = response.get_json()
-    assert json_data['message'] == 'User activated'
+    assert json_data["message"] == "User activated"

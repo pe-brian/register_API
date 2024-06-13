@@ -9,48 +9,52 @@ from src import User, ActivationCode, Injector
 
 app = Flask(__name__)
 
-@app.route('/register', methods=['POST'])
+
+@app.route("/register", methods=["POST"])
 @field("email", str)
 @field("password", str)
 def register(email: str, password: str) -> None:
-    """ Register user API route """
+    """Register user API route"""
     # Attempt to register the user
     try:
         User.register(email, password)
-     # Failed
+    # Failed
     except Exception as e:
-        return jsonify({'message': str(e)}), 404
+        return jsonify({"message": str(e)}), 404
     # Success
-    return jsonify({'message': 'User registered, please check your email for the activation code'})
+    return jsonify(
+        {"message": "User registered, please check your email for the activation code"}
+    )
 
 
-@app.route('/activate', methods=['POST'])
+@app.route("/activate", methods=["POST"])
 @field("email", str)
 @field("password", str)
 @field("code", str)
 def activate(email: str, password: str, code: str) -> None:
-    """ Activate user API route """
+    """Activate user API route"""
     # Attempt to identify user
     user = User.get_by_email(email)
     if not user:
-        return jsonify({'message': 'User not found'}), 404
+        return jsonify({"message": "User not found"}), 404
     # Attempt to authenticate user
     try:
         user.authenticate(password)
     # Failed
     except Exception as e:
-        return jsonify({'message': str(e)}), 400
+        return jsonify({"message": str(e)}), 400
     # Success
     # Attempt to activate user account
     try:
         user.activate(code)
     # Failed
     except Exception as e:
-        return jsonify({'message': str(e)}), 400
+        return jsonify({"message": str(e)}), 400
     # Success
-    return jsonify({'message': 'User activated'})
+    return jsonify({"message": "User activated"})
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
 
     Injector.resolve("LoggingService")
 

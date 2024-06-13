@@ -21,8 +21,8 @@ class TestDispatchService:
         dispatch_service = DispatchService()
         subscriber = FakeSubscriber()
         dispatch_service.subscribe(subscriber)
-        dispatch_service.dispatch('test_event', 42, key='value')
-        assert subscriber.events_handled == [('test_event', (42,), {'key': 'value'})]
+        dispatch_service.dispatch("test_event", 42, key="value")
+        assert subscriber.events_handled == [("test_event", (42,), {"key": "value"})]
 
     def test_dispatch_multiple_subscribers(self):
         dispatch_service = DispatchService()
@@ -30,6 +30,6 @@ class TestDispatchService:
         subscriber2 = FakeSubscriber()
         dispatch_service.subscribe(subscriber1)
         dispatch_service.subscribe(subscriber2)
-        dispatch_service.dispatch('test_event')
+        dispatch_service.dispatch("test_event")
         assert len(subscriber1.events_handled) == 1
         assert len(subscriber2.events_handled) == 1

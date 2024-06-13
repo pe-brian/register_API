@@ -16,7 +16,8 @@ class ModelFieldValidationError(Exception):
 @dataclass
 @inject("DatabaseService")
 class BaseModel:
-    """ Base model """
+    """Base model"""
+
     id: int = field(default=None, init=False)
 
     def __post_init__(self) -> None:
@@ -30,34 +31,42 @@ class BaseModel:
                 validate = getattr(self, validator_name)
                 if hasattr(validate, "__call__"):
                     validate()
-    
+
     @classmethod
     def get_table_name(cls) -> str:
-        """ Return the table name """
+        """Return the table name"""
         return camel_to_snake(cls.__name__)
 
     @classmethod
     def create(cls, *args, **kwargs) -> object:
         """"""
-        return Service.get("DatabaseService").create_object(table_name=cls.get_table_name(), *args, **kwargs)
+        return Service.get("DatabaseService").create_object(
+            table_name=cls.get_table_name(), *args, **kwargs
+        )
 
     def save(self) -> object:
-        """ Save object to its table """
-        obj = self.database_service.create_or_update_object(table_name=self.__class__.get_table_name(), **asdict(self))
+        """Save object to its table"""
+        obj = self.database_service.create_or_update_object(
+            table_name=self.__class__.get_table_name(), **asdict(self)
+        )
         self.id = obj.id
         return obj
 
     def delete(self) -> None:
-        """ Remove object from its table """
-        self.database_service.delete_object_by_id(table_name=self.__class__.get_table_name(), id=self.id)
+        """Remove object from its table"""
+        self.database_service.delete_object_by_id(
+            table_name=self.__class__.get_table_name(), id=self.id
+        )
         self.id = None
 
     @classmethod
     def get(cls, id: int) -> object:
-        """ Get the first object matching the condition """
+        """Get the first object matching the condition"""
         return Service.get("DatabaseService").get_object_by_id(cls.get_table_name(), id)
-    
+
     @classmethod
     def filter(cls, condition: Condition) -> Iterable[object]:
-        """ Filter objects """
-        return Service.get("DatabaseService").filter_objects(table_name=cls.get_table_name(), condition=condition)
+        """Filter objects"""
+        return Service.get("DatabaseService").filter_objects(
+            table_name=cls.get_table_name(), condition=condition
+        )

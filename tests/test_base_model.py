@@ -32,14 +32,16 @@ def test_get_table_name():
 
 @patch("src.base_model.Service")
 def test_create(service_get_mock: MagicMock):
-    service_get_mock.get.return_value.create_object.return_value = TestModel(name="Test", value=True)
+    service_get_mock.get.return_value.create_object.return_value = TestModel(
+        name="Test", value=True
+    )
     created_obj = TestModel.create(name="Test", value=True)
     assert created_obj.name == "Test"
     assert created_obj.value is True
 
 
 def test_save():
-    with patch.object(BaseModel, 'database_service', MagicMock()) as db_service_mock:
+    with patch.object(BaseModel, "database_service", MagicMock()) as db_service_mock:
         test_object = TestModel(name="Test", value=True)
         returned_test_object = TestModel(name="Test", value=True)
         returned_test_object.id = 1
@@ -50,7 +52,7 @@ def test_save():
 
 
 def test_delete() -> None:
-    with patch.object(BaseModel, 'database_service', MagicMock()) as db_service_mock:
+    with patch.object(BaseModel, "database_service", MagicMock()) as db_service_mock:
         test_model = TestModel(name="Test", value=True)
         test_model.id = 1
         test_model.delete()

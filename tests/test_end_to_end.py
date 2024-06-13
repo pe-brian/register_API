@@ -10,7 +10,7 @@ from src.services.in_memory_database_service import InMemoryDatabaseService
 
 @pytest.fixture(autouse=True)
 def init():
-    
+
     load_dotenv()
     print(getenv("MYSQL_DB"))
     Injector.dependencies["DatabaseService"].cls = InMemoryDatabaseService

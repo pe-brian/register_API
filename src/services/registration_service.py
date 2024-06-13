@@ -13,9 +13,10 @@ class UserAlreadyRegisteredError(Exception):
 @inject("DispatchService")
 @inject("CodeSenderService")
 class RegistrationService(Service):
-    """ Registration service """
+    """Registration service"""
+
     def register(self, email: str, password: str) -> User:
-        """ Register a user with email and password """
+        """Register a user with email and password"""
         # Raise an error if user already registered
         if User.get_by_email(email):
             raise UserAlreadyRegisteredError(email)

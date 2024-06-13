@@ -26,13 +26,16 @@ class UserAlreadyActivatedError(Exception):
 @declare
 @inject("DispatchService")
 class ActivationService(Service):
-    """ Activation service """
+    """Activation service"""
+
     def has_code_expired(self, code_timestamp: float) -> bool:
-        """ Check if the code has expired """
-        return datetime.now() > datetime.fromtimestamp(code_timestamp) + timedelta(minutes=1)
+        """Check if the code has expired"""
+        return datetime.now() > datetime.fromtimestamp(code_timestamp) + timedelta(
+            minutes=1
+        )
 
     def activate(self, user: User, code: str) -> None:
-        """ Activate the user account """
+        """Activate the user account"""
         if user.is_active:
             raise UserAlreadyActivatedError(user.email)
         activation_code = ActivationCode.get(user.id)

@@ -10,7 +10,8 @@ class ServiceNotAvailableError(Exception):
 
 
 class Service(Subscriber):
-    """ Service """
+    """Service"""
+
     @staticmethod
     def get(name: str) -> Self:
         return Injector.resolve(name)
