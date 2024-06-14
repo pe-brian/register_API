@@ -1,5 +1,3 @@
-from importlib import reload
-
 from unittest.mock import patch, MagicMock
 
 import pytest
@@ -12,32 +10,19 @@ from src.models.activation_code import ActivationCode
 
 
 @pytest.fixture(autouse=True)
-def isolate_tests():
-    # Reset dependencies
-    Injector.dependencies = {}
-    # Reload modules to auto-declare dependencies
-    import src.services.database_service
-    reload(src.services.database_service)
-    import src.services.dispatch_service
-    reload(src.services.dispatch_service)
-    import src.services.code_sender_service
-    reload(src.services.code_sender_service)
+def mock_dependencies():
     # Replace dependencies by mocks
     for name in Injector.dependencies:
-        dep = Injector.dependencies[name]
-        dep.cls = MagicMock()
-        dep.cls.__name__ = name
-
-@pytest.fixture
-def registration_service():
-    from src.services import RegistrationService
-    return RegistrationService()
+        if name != "RegistrationService":
+            dep = Injector.dependencies[name]
+            dep.cls = MagicMock()
+            dep.cls.__name__ = name
 
 
 @patch("src.models.user.User.create")
 @patch("src.models.activation_code.ActivationCode.create")
 def test_register(
-    mock_activation_code_create: MagicMock, mock_user_create: MagicMock, registration_service: Service
+    mock_activation_code_create: MagicMock, mock_user_create: MagicMock
 ):
     mock_user = MagicMock(spec=User)
     mock_activation_code = MagicMock(spec=ActivationCode)
@@ -46,7 +31,7 @@ def test_register(
     mock_activation_code.code = "1234"
     mock_activation_code_create.return_value = mock_activation_code
     Service.get("DatabaseService").filter_objects.return_value = []
-    user = registration_service.register("test@example.com", "password123") # tested function call
+    user = Service.get("RegistrationService").register("test@example.com", "password123") # tested function call
     mock_user_create.assert_called_once_with(
         email="test@example.com", password="password123"
     )

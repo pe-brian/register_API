@@ -2,7 +2,6 @@ from .activation_service import ActivationService
 from .code_sender_service import CodeSenderService
 from .cryptography_service import CryptographyService
 from .database_service import DatabaseService
-from .in_memory_database_service import InMemoryDatabaseService
 from .dispatch_service import DispatchService
 from .logging_service import LoggingService
 from .registration_service import RegistrationService

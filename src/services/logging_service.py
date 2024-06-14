@@ -41,5 +41,4 @@ class LoggingService(Service):
             case "error":
                 self._logger.error(msg)
             case "info":
-                print("@@", msg)
                 self._logger.info(msg)

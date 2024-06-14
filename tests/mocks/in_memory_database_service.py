@@ -1,10 +1,12 @@
 from chocolatine import Condition
 
 from src.base_model import BaseModel
+from src.injector import declare
 from src.service import Service
 
 
-class InMemoryDatabaseService(Service):
+@declare
+class DatabaseService(Service):
     """In memory Database service"""
 
     def __init__(self) -> None:

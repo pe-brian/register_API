@@ -1,10 +1,9 @@
 from flask.testing import FlaskClient
 import pytest
 
-
 from app import app
 from src.injector import Injector
-from src.services.in_memory_database_service import InMemoryDatabaseService
+from tests.mocks.in_memory_database_service import DatabaseService
 from src.models.activation_code import ActivationCode
 from src.models.user import User
 
@@ -18,7 +17,7 @@ def client():
 
 @pytest.fixture(autouse=True)
 def mock_db_service():
-    Injector.dependencies["DatabaseService"].cls = InMemoryDatabaseService
+    Injector.dependencies["DatabaseService"].cls = DatabaseService
     db_service = Injector.resolve("DatabaseService")
     db_service.register_models(User, ActivationCode)
     db_service.create_tables()

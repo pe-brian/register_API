@@ -2,12 +2,12 @@ from unittest.mock import MagicMock, patch
 import pytest
 from src.models.user import User
 from src.service import Service
-from src.services.in_memory_database_service import InMemoryDatabaseService
+from tests.mocks.in_memory_database_service import DatabaseService
 
 
 @pytest.fixture
 def db_service():
-    return InMemoryDatabaseService()
+    return DatabaseService()
 
 
 @pytest.fixture(autouse=True)
@@ -30,7 +30,6 @@ def test_create_object(db_service: Service):
 def test_update_object(db_service: Service):
     with patch.object(User, "validation_service", MagicMock()):
         # Create a new user
-        # Create a new user
         user_data = {"email": "bob@example.com", "password_hash": "*" * 60}
         user = db_service.create_object("user", **user_data)
         # Update user's email
@@ -42,7 +41,6 @@ def test_update_object(db_service: Service):
 
 def test_delete_object_by_id(db_service: Service):
     with patch.object(User, "validation_service", MagicMock()):
-        # Create a new user
         # Create a new user
         user_data = {"email": "charlie@example.com", "password_hash": "*" * 60}
         user = db_service.create_object("user", **user_data)
