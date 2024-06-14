@@ -31,4 +31,5 @@ class ActivationService(Service):
         else:
             self.dispatch_service.dispatch("USER_ACCOUNT_ACTIVATED", id=user.id)
             user.is_active = True
+            activation_code.delete()
             user.save()
