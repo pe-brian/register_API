@@ -1,15 +1,15 @@
 FROM python:3.12.4
 
-RUN apt-get update
+RUN apt-get update && apt-get install -y \
+    build-essential
 
 WORKDIR /app
 
 COPY requirements.txt .
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY /src .
-COPY app.py .
+COPY . .
 
 EXPOSE 5000
 
-CMD python app.py
+CMD ["flask", "run", "--host=0.0.0.0"]
