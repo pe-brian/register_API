@@ -5,7 +5,7 @@ from chocolatine import Col
 from src.injector import Injector
 from src.models.activation_code import ActivationCode
 from src.models.user import User
-    
+
 
 @pytest.fixture(autouse=True)
 def prepare_db():

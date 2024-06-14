@@ -57,7 +57,7 @@ def test_activate_correct_code(
     mock_get: MagicMock, user_mock: MagicMock, activation_code_mock: MagicMock
 ):
     mock_get.return_value = activation_code_mock
-    
+
     service = Service.get("ActivationService")
     service.activate(user_mock, "1234")
     Service.get("DispatchService").dispatch.assert_called_once_with(

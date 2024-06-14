@@ -4,7 +4,6 @@ Flask web application to register users and activate accounts with a pin code se
 
 # TODO
 
-- Better unit test isolation (some tests passes alone, but not when they are preceded by other ones)
 - Better use of logging service (to be more readable)
 - Test code style unified
 - More events sent to the dispatch service
@@ -24,6 +23,8 @@ The following variables must be defined in your environement :
     MYSQL_USER
     MYSQL_PASSWORD
     MYSQL_URL
+
+NB: You can complete the docker-compose to fit your needs
 
 # Prerequises
 
@@ -53,4 +54,4 @@ The following variables must be defined in your environement :
 
 # Architecture
 
-- Take a look at the diagram available on this repo
+![title](architecture_diagram.png)

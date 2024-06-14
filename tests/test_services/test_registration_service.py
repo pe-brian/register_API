@@ -21,9 +21,7 @@ def mock_dependencies():
 
 @patch("src.models.user.User.create")
 @patch("src.models.activation_code.ActivationCode.create")
-def test_register(
-    mock_activation_code_create: MagicMock, mock_user_create: MagicMock
-):
+def test_register(mock_activation_code_create: MagicMock, mock_user_create: MagicMock):
     mock_user = MagicMock(spec=User)
     mock_activation_code = MagicMock(spec=ActivationCode)
     mock_user_create.return_value = mock_user
@@ -31,7 +29,9 @@ def test_register(
     mock_activation_code.code = "1234"
     mock_activation_code_create.return_value = mock_activation_code
     Service.get("DatabaseService").filter_objects.return_value = []
-    user = Service.get("RegistrationService").register("test@example.com", "password123") # tested function call
+    user = Service.get("RegistrationService").register(
+        "test@example.com", "password123"
+    )  # tested function call
     mock_user_create.assert_called_once_with(
         email="test@example.com", password="password123"
     )
@@ -39,7 +39,9 @@ def test_register(
     Service.get("CodeSenderService").send_activation_code.assert_called_once()
     mock_activation_code_create.assert_called_once_with(user_id=mock_user.id)
     mock_activation_code.save.assert_called_once()
-    Service.get("DispatchService").dispatch.assert_any_call("USER_REGISTERED", id=mock_user.id)
+    Service.get("DispatchService").dispatch.assert_any_call(
+        "USER_REGISTERED", id=mock_user.id
+    )
     Service.get("DispatchService").dispatch.assert_any_call(
         "ACTIVATION_CODE_CREATED", id=mock_activation_code.id
     )

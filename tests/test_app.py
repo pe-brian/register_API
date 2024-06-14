@@ -4,7 +4,6 @@ import pytest
 
 from app import app
 from src.service import Service
-from tests.mocks.in_memory_database_service import DatabaseService
 from src.models.activation_code import ActivationCode
 from src.models.user import User
 
@@ -40,7 +39,12 @@ def test_activate(client: FlaskClient):
         user_mock = MagicMock(spec=User)
         get_by_email_mock.return_value = user_mock
         response = client.post(
-            "/activate", json={"email": "test@example.com", "password": "Password123!", "code": "1234"}
+            "/activate",
+            json={
+                "email": "test@example.com",
+                "password": "Password123!",
+                "code": "1234",
+            },
         )
         assert user_mock.authenticate.called
         assert user_mock.activate.called
