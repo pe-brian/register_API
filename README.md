@@ -1,8 +1,9 @@
 # Register API
 
 Flask web application to register users and activate accounts with a pin code sent by email.
+This application is only intended for the **demonstration** of a clean architecture (but can be improved), without framework except Flask, and with as few libraries as possible.
 
-# Usage
+# USAGE
 
 ```docker-compose up -d```
 
