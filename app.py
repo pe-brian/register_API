@@ -10,6 +10,20 @@ from src import User, ActivationCode, Injector
 app = Flask(__name__)
 
 
+def init():
+    Injector.resolve("LoggingService")
+
+    # Init the database if needed
+    db_service = Injector.resolve("DatabaseService")
+    db_service.register_models(User, ActivationCode)
+    db_service.create_tables(drop_old=True)
+
+    # Register all services to the event dispatcher
+    dispatch_service = Injector.resolve("DispatchService")
+    for dep in Injector.dependencies.values():
+        dispatch_service.subscribe(dep.get())
+
+
 @app.route("/register", methods=["POST"])
 @field("email", str)
 @field("password", str)
@@ -54,22 +68,8 @@ def activate(email: str, password: str, code: str) -> None:
     return jsonify({"message": "User activated"})
 
 
+init()
+
+
 if __name__ == "__main__":
-
-    Injector.resolve("LoggingService")
-
-    # Init the database if needed
-    db_service = Injector.resolve("DatabaseService")
-    db_service.register_models(User, ActivationCode)
-    db_service.create_tables(drop_old=True)
-
-    # Register all services to the event dispatcher
-    dispatch_service = Injector.resolve("DispatchService")
-    for dep in Injector.dependencies.values():
-        dispatch_service.subscribe(dep.get())
-
-    # Start the app loop
     app.run(debug=True)
-
-    # Close the app
-    db_service.close()
