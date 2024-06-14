@@ -2,9 +2,15 @@
 
 Flask web application to register users and activate accounts with a pin code sent by email.
 
-# KNOW PROBLEMS
+# Usage
 
-- For an unknow reason, the flask application doesn't work properly when started with the command flask run (like in the dockerfile), use the command python app.py locally instead
+```docker-compose up -d```
+
+# KNOW ISSUES
+
+- For an unknow reason, the flask application doesn't seem to work properly when started with the command flask run (like in the dockerfile) :
+    - Stop the app container (not the database one)
+    - Run the app with ```python app.py```
 
 # TODO
 
@@ -43,10 +49,6 @@ NB: You can complete the docker-compose to fit your needs
 # SGBD
 
 - MySQL
-
-# Usage
-
-```docker-compose up -d```
 
 # Testing
 
