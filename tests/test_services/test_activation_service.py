@@ -4,10 +4,6 @@ from datetime import datetime, timedelta
 
 from src.injector import Injector
 from src.service import Service
-from src.services.activation_service import (
-    CodeExpiredError,
-    WrongCodeError,
-)
 
 
 @pytest.fixture(autouse=True)
@@ -27,6 +23,7 @@ def user_mock():
     user.is_active = False
     return user
 
+
 @pytest.fixture
 def activation_code_mock():
     activation_code = MagicMock()
@@ -34,6 +31,7 @@ def activation_code_mock():
     activation_code.timestamp = datetime.now().timestamp()
     activation_code.user_id = 1
     return activation_code
+
 
 @pytest.fixture
 def expired_activation_code_mock():
@@ -43,17 +41,20 @@ def expired_activation_code_mock():
     activation_code.user_id = 1
     return activation_code
 
+
 def test_has_code_expired_false(activation_code_mock: MagicMock):
     service = Service.get("ActivationService")
     assert not service.has_code_expired(activation_code_mock.timestamp)
+
 
 def test_has_code_expired_true(expired_activation_code_mock: MagicMock):
     service = Service.get("ActivationService")
     assert service.has_code_expired(expired_activation_code_mock.timestamp)
 
+
 @patch("src.services.activation_service.ActivationCode.get")
 def test_activate_correct_code(
-    mock_get, user_mock: MagicMock, activation_code_mock: MagicMock
+    mock_get: MagicMock, user_mock: MagicMock, activation_code_mock: MagicMock
 ):
     mock_get.return_value = activation_code_mock
     
@@ -64,20 +65,33 @@ def test_activate_correct_code(
     )
     assert user_mock.is_active
 
+
 @patch("src.services.activation_service.ActivationCode.get")
 def test_activate_incorrect_code(
-    mock_get, user_mock: MagicMock, activation_code_mock: MagicMock
+    mock_get: MagicMock, user_mock: MagicMock, activation_code_mock: MagicMock
 ):
     mock_get.return_value = activation_code_mock
     service = Service.get("ActivationService")
-    with pytest.raises(WrongCodeError):
+    with pytest.raises(PermissionError, match="Wrong code"):
         service.activate(user_mock, "wrong_code")
+
 
 @patch("src.services.activation_service.ActivationCode.get")
 def test_activate_expired_code(
-    mock_get, user_mock: MagicMock, expired_activation_code_mock: MagicMock
+    mock_get: MagicMock, user_mock: MagicMock, expired_activation_code_mock: MagicMock
 ):
     mock_get.return_value = expired_activation_code_mock
     service = Service.get("ActivationService")
-    with pytest.raises(CodeExpiredError):
+    with pytest.raises(PermissionError, match="Code expired"):
+        service.activate(user_mock, "1234")
+
+
+@patch("src.services.activation_service.ActivationCode.get")
+def test_activate_user_is_already_active(
+    mock_get: MagicMock, user_mock: MagicMock, expired_activation_code_mock: MagicMock
+):
+    user_mock.is_active = True
+    mock_get.return_value = expired_activation_code_mock
+    service = Service.get("ActivationService")
+    with pytest.raises(PermissionError, match="User is already active"):
         service.activate(user_mock, "1234")

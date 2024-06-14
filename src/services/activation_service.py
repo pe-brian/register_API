@@ -1,26 +1,10 @@
 from datetime import datetime, timedelta
 
-from chocolatine import Col
 
 from ..injector import declare, inject
 from ..models.activation_code import ActivationCode
 from ..models.user import User
 from ..service import Service
-
-
-class CodeExpiredError(Exception):
-    def __init__(self) -> None:
-        super().__init__("Code has expired")
-
-
-class WrongCodeError(Exception):
-    def __init__(self) -> None:
-        super().__init__("Wrong code")
-
-
-class UserAlreadyActivatedError(Exception):
-    def __init__(self, email: str) -> None:
-        super().__init__(f"User already activated with email {email}")
 
 
 @declare
@@ -37,13 +21,13 @@ class ActivationService(Service):
     def activate(self, user: User, code: str) -> None:
         """Activate the user account"""
         if user.is_active:
-            raise UserAlreadyActivatedError(user.email)
+            raise PermissionError("User is already active")
         activation_code = ActivationCode.get(user.id)
         if code != activation_code.code:
-            raise WrongCodeError()
+            raise PermissionError("Wrong code")
         if self.has_code_expired(activation_code.timestamp):
             activation_code.delete()
-            raise CodeExpiredError()
+            raise PermissionError("Code expired")
         else:
             self.dispatch_service.dispatch("USER_ACCOUNT_ACTIVATED", id=user.id)
             user.is_active = True
