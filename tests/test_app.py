@@ -1,8 +1,9 @@
+from unittest.mock import MagicMock, patch
 from flask.testing import FlaskClient
 import pytest
 
 from app import app
-from src.injector import Injector
+from src.service import Service
 from tests.mocks.in_memory_database_service import DatabaseService
 from src.models.activation_code import ActivationCode
 from src.models.user import User
@@ -16,13 +17,10 @@ def client():
 
 
 @pytest.fixture(autouse=True)
-def mock_db_service():
-    Injector.dependencies["DatabaseService"].cls = DatabaseService
-    db_service = Injector.resolve("DatabaseService")
+def initialize_db():
+    db_service = Service.get("DatabaseService")
     db_service.register_models(User, ActivationCode)
     db_service.create_tables()
-    dispatch_service = Injector.resolve("DispatchService")
-    dispatch_service.subscribe(Injector.dependencies.values())
 
 
 def test_register(client: FlaskClient):
@@ -38,9 +36,14 @@ def test_register(client: FlaskClient):
 
 
 def test_activate(client: FlaskClient):
-    response = client.post(
-        "/activate", json={"email": "test@example.com", "code": "1234"}
-    )
-    assert response.status_code == 200
-    json_data = response.get_json()
-    assert json_data["message"] == "User activated"
+    with patch("app.User.get_by_email") as get_by_email_mock:
+        user_mock = MagicMock(spec=User)
+        get_by_email_mock.return_value = user_mock
+        response = client.post(
+            "/activate", json={"email": "test@example.com", "password": "Password123!", "code": "1234"}
+        )
+        assert user_mock.authenticate.called
+        assert user_mock.activate.called
+        assert response.status_code == 200
+        json_data = response.get_json()
+        assert json_data["message"] == "User activated"

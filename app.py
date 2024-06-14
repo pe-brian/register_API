@@ -20,7 +20,7 @@ def register(email: str, password: str) -> None:
         User.register(email, password)
     # Failed
     except Exception as e:
-        return jsonify({"message": str(e)}), 404
+        return jsonify({"message": str(e)}), 400
     # Success
     return jsonify(
         {"message": "User registered, please check your email for the activation code"}
