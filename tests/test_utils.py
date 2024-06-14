@@ -1,12 +1,11 @@
 from typing import Literal
 import pytest
 from chocolatine import SqlType
-
-from src.utils import generate_code, camel_to_snake, cast_to_sql_type
+import src.utils as utils
 
 
 def test_generate_code():
-    code = generate_code()
+    code = utils.generate_code()
     assert len(code) == 4
     assert code.isdigit()
 
@@ -34,7 +33,7 @@ def test_camel_to_snake(
         | Literal["get_http_response_code"]
     ),
 ):
-    assert camel_to_snake(test_input) == expected
+    assert utils.camel_to_snake(test_input) == expected
 
 
 @pytest.mark.parametrize(
@@ -50,4 +49,4 @@ def test_cast_to_sql_type(
     test_input: type[str] | type[int] | type[float] | type[bool],
     expected: SqlType | SqlType | SqlType | SqlType,
 ):
-    assert cast_to_sql_type(test_input) == expected
+    assert utils.cast_to_sql_type(test_input) == expected

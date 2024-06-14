@@ -31,3 +31,4 @@ def cast_to_sql_type(old_type: Union[str, int, float]) -> SqlType:
             return SqlType.Boolean
         case _:
             raise ValueError("Incompatible type")
+
