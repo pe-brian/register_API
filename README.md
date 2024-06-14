@@ -6,12 +6,6 @@ Flask web application to register users and activate accounts with a pin code se
 
 ```docker-compose up -d```
 
-# KNOW ISSUES
-
-- For an unknow reason, the flask application doesn't seem to work properly when started with the command flask run (like in the dockerfile) :
-    - Stop the app container (not the database one)
-    - Run the app with ```python app.py```
-
 # TODO
 
 - Better use of logging service (to be more readable)

@@ -116,10 +116,8 @@ class DatabaseService(Service):
 
     def delete_object_by_id(self, table_name: str, id: int) -> None:
         """Delete the object by id"""
-        condition = (Col("id") == id)
-        self.exec_query(
-            Query.delete_rows(table=table_name, filter=(condition)).build()
-        )
+        condition = Col("id") == id
+        self.exec_query(Query.delete_rows(table=table_name, filter=(condition)).build())
 
     def connect_to_db(self, user: str, password: str, host: str, db: str):
         """Connect to the MySQL database"""
