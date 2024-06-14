@@ -3,7 +3,7 @@
 Flask web application to register users and activate accounts with a pin code sent by email.
 This application is only intended for the **demonstration** of a clean architecture (but can be improved), without framework except Flask, and with as few libraries as possible.
 
-# USAGE
+# Usage
 
 ```docker-compose up -d```
 
@@ -30,6 +30,10 @@ The following variables must be defined in your environement :
     MYSQL_URL
 
 NB: You can complete the docker-compose to fit your needs
+
+# Warning
+
+For commodity reasons and because it is a demo, all the database tables are dropped at the application start
 
 # Prerequises
 

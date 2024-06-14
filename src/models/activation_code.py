@@ -14,7 +14,7 @@ class ActivationCode(BaseModel):
 
     user_id: int
     code: str = field(default_factory=generate_code)
-    timestamp: float = field(default_factory=datetime.now().timestamp)
+    timestamp: float = field(default_factory=lambda: datetime.now().timestamp())
 
     def validate_code(self) -> None:
         """Validate the code"""

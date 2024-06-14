@@ -25,6 +25,7 @@ class LoggingService(Service):
 
     def on_event(self, event: str, *args, **kwargs):
         """Listen an event"""
+        print(event, "|", kwargs)
         if event.startswith("ERROR_"):
             self.log(
                 f"[ERROR] {event} (args: {args} | kwargs: {kwargs}))", severity="error"
@@ -36,7 +37,6 @@ class LoggingService(Service):
 
     def log(self, msg: str, severity: str = "info"):
         """Log a message"""
-        print(msg)
         match severity:
             case "error":
                 self._logger.error(msg)
