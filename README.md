@@ -2,6 +2,16 @@
 
 Flask web application to register users and activate accounts with a pin code sent by email.
 
+# TODO
+
+- Better unit test isolation (some tests passes alone, but not when they are preceded by other ones)
+- Better use of logging service (to be more readable)
+- Test code style unified
+- More events sent to the dispatch service
+- Better error system
+- Check code test coverage
+- Implement CI/CD with github Actions
+
 # Configuration
 
 The following variables must be defined in your environement :

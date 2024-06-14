@@ -30,7 +30,7 @@ def test_register(client: FlaskClient):
     response = client.post(
         "/register", json={"email": "test@example.com", "password": "Password123!"}
     )
-    # assert response.status_code == 200
+    assert response.status_code == 200
     json_data = response.get_json()
     assert (
         json_data["message"]
