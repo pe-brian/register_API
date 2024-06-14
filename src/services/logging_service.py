@@ -23,16 +23,16 @@ class LoggingService(Service):
     def __del__(self) -> None:
         self._logger.info("[ALERT] Ended logging service")
 
-    def on_event(self, event: str, *args, **kwargs):
+    def on_event(self, event: str, *_, **kwargs):
         """Listen an event"""
         print(event, "|", kwargs)
         if event.startswith("ERROR_"):
             self.log(
-                f"[ERROR] {event} (args: {args} | kwargs: {kwargs}))", severity="error"
+                f"{event} | {kwargs}", severity="error"
             )
         else:
             self.log(
-                f"[INFO] {event} (args: {args} | kwargs: {kwargs}))", severity="info"
+                f"{event} | {kwargs}", severity="info"
             )
 
     def log(self, msg: str, severity: str = "info"):

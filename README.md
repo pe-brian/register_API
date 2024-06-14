@@ -9,7 +9,6 @@ This application is only intended for the **demonstration** of a clean architect
 
 # TODO
 
-- Better use of logging service (to be more readable)
 - Test code style unified
 - More events sent to the dispatch service
 - Better error system
