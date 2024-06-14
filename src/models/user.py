@@ -63,9 +63,9 @@ class User(BaseModel):
         res = User.filter(condition=(Col("email") == email))
         return res[0] if res else None
 
-    def authenticate(self, password: str, check_password: str) -> None:
+    def authenticate(self, password: str) -> None:
         """Authenticate the user"""
-        if not self.cryptography_service.check_password(password, check_password):
+        if not self.cryptography_service.check_password(password, self.password_hash):
             raise UserAuthenticationError()
 
     def activate(self, code: str) -> None:
